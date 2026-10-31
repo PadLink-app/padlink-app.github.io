@@ -1,0 +1,130 @@
+/* PadLink text boxes: the editor (format bar, text, math keyboard), shared by the whiteboard and the pad. */
+
+.rt-editor { display: flex; flex-direction: column; gap: 8px; font-family: ui-rounded, 'SF Pro Rounded', -apple-system, 'Segoe UI', sans-serif; }
+.rt-editor[hidden], .rt-keys[hidden] { display: none; }
+/* iPadOS puts its own Copy/Paste/Format bubble above selected words. Keep PadLink's controls below them, in reach. */
+.rt-editor.rt-touch .rt-text { order: 1; }
+.rt-editor.rt-touch .rt-bar { order: 2; }
+
+.rt-bar {
+  display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+  padding: 6px; background: #fff; border-radius: 16px; color: #3a4256;
+  box-shadow: 0 2px 6px rgba(29, 36, 51, 0.1), 0 14px 34px rgba(29, 36, 51, 0.16);
+}
+.rt-bar::-webkit-scrollbar { display: none; }
+.rt-bar button, .rt-bar select, .rt-bar input {
+  flex: none; height: 38px; min-width: 38px; padding: 0 10px; border: 0; border-radius: 11px;
+  background: transparent; color: inherit; font: 700 15px/1 inherit; font-family: inherit; cursor: pointer;
+}
+.rt-bar select { background: #f5f7fb; color: #1d2433; padding-right: 6px; }
+.rt-size { display: inline-flex; align-items: center; flex: none; background: #f5f7fb; border-radius: 11px; }
+.rt-size button { min-width: 32px; padding: 0; font-size: 18px; }
+.rt-size input { width: 46px; min-width: 0; padding: 0; text-align: center; background: transparent; -moz-appearance: textfield; }
+.rt-size input::-webkit-inner-spin-button, .rt-size input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.rt-b { font-weight: 900 !important; }
+.rt-i { font-style: italic; font-family: Georgia, serif !important; }
+.rt-u { text-decoration: underline; }
+.rt-bar button.on { background: #2f6bff; color: #fff; }
+.rt-sep { flex: none; width: 1px; height: 24px; background: rgba(29, 36, 51, 0.12); margin: 0 2px; }
+.rt-color span { padding: 0 3px 2px; border-bottom: 4px solid var(--c, #1f2328); font-weight: 800; }
+.rt-highlight span { padding: 2px 4px; border-radius: 3px; background: var(--h, transparent); box-shadow: inset 0 0 0 1px rgba(29, 36, 51, 0.12); }
+.rt-paragraph { font-size: 19px !important; letter-spacing: -3px; padding-right: 13px !important; }
+.rt-math { font-family: 'Cambria Math', 'STIX Two Math', serif !important; font-size: 17px !important; }
+.rt-done { background: #2f6bff !important; color: #fff !important; padding: 0 16px !important; }
+
+.rt-pop {
+  position: fixed; z-index: 80; min-width: 220px; padding: 10px; border-radius: 14px; background: #fff; color: #1d2433;
+  box-shadow: 0 0 0 1px rgba(29, 36, 51, 0.1), 0 14px 36px rgba(29, 36, 51, 0.22);
+  font: 600 14px/1.2 ui-rounded, 'SF Pro Rounded', -apple-system, 'Segoe UI', sans-serif;
+  -webkit-user-select: none; user-select: none;
+}
+.rt-pop[hidden], .rt-pop [hidden] { display: none; }
+.rt-pop b { display: block; margin: 0 2px 9px; font-size: 13px; color: #5b6478; }
+.rt-swatches, .rt-pop-row { display: flex; align-items: center; gap: 7px; }
+.rt-swatches button, .rt-pop-row button {
+  width: 34px; min-width: 34px; height: 34px; padding: 0; border: 0; border-radius: 9px; background: #f1f4f9;
+  color: #293146; font: 700 15px/1 inherit; cursor: pointer;
+}
+.rt-swatches button:not(.rt-no-highlight) { border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(29, 36, 51, 0.14); }
+.rt-swatches button.on, .rt-pop-row button.on { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2f6bff; }
+.rt-no-highlight { width: 48px !important; font-size: 11px !important; }
+.rt-custom { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 2px 0; color: #5b6478; font-size: 12px; }
+.rt-custom input { width: 38px; height: 28px; padding: 0; border: 0; border-radius: 8px; background: none; }
+.rt-pop-row + .rt-pop-row { margin-top: 8px; }
+.rt-pop-row button:disabled { opacity: 0.35; cursor: default; }
+.rt-aligns button { font-size: 18px; letter-spacing: -3px; padding-right: 3px; }
+.rt-aligns [data-align="l"] { text-align: left; }
+.rt-aligns [data-align="c"] { text-align: center; }
+.rt-aligns [data-align="r"] { text-align: right; }
+
+.rt-text {
+  min-height: 1.4em; max-height: 46vh; overflow-y: auto; padding: 10px 14px; outline: none;
+  background: #fff; border: 2px dashed #2f6bff; border-radius: 10px;
+  color: #1f2328; font-family: 'Segoe UI', ui-rounded, -apple-system, Arial, sans-serif; line-height: 1.3;
+  -webkit-user-select: text; user-select: text; white-space: pre-wrap; overflow-wrap: break-word;
+}
+.rt-text .p { position: relative; min-height: 1em; padding-left: var(--rt-indent, 0px); }
+.rt-text .p[data-list] { padding-left: calc(var(--rt-indent, 0px) + 1.4em); }
+.rt-text { counter-reset: rt-n; }
+.rt-text .p:not([data-list="n"]) { counter-reset: rt-n; }
+.rt-text .p[data-list="n"] { counter-increment: rt-n; }
+.rt-text .p[data-list]::before { position: absolute; left: var(--rt-indent, 0px); width: 1.05em; text-align: right; }
+.rt-text .p[data-list="b"]::before { content: '•'; }
+.rt-text .p[data-list="n"]::before { content: counter(rt-n) '.'; }
+.rt-text .p[data-align][data-list]::before { position: static; display: inline-block; margin-left: -1.4em; margin-right: 0.35em; }
+
+/* Math inside the text */
+.rt-text .m {
+  font-family: 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif; font-weight: 400; font-style: normal;
+  padding: 0 3px; margin: 0 1px; border-radius: 5px; background: rgba(47, 107, 255, 0.08);
+}
+.rt-text .ms { display: inline-flex; vertical-align: middle; }
+.rt-text .sl { outline: none; min-width: 0.5em; display: inline-block; text-align: center; }
+.rt-text .sl:empty, .rt-text .sl:only-child { min-height: 0.8em; }
+.rt-text .fr { flex-direction: column; align-items: stretch; font-size: 0.8em; line-height: 1.1; margin: 0 2px; }
+.rt-text .fr > .nu { border-bottom: max(1.5px, 0.07em) solid currentColor; padding: 0 0.15em 0.08em; }
+.rt-text .fr > .de { padding: 0.08em 0.15em 0; }
+.rt-text .sp { vertical-align: 0.6em; font-size: 0.62em; }
+.rt-text .rt { align-items: stretch; }
+.rt-text .rt::before { content: '√'; padding-right: 0.02em; }
+.rt-text .rt > .rd { border-top: max(1.5px, 0.06em) solid currentColor; padding: 0.06em 0.1em 0; }
+.rt-text .sl { box-shadow: inset 0 0 0 1px rgba(47, 107, 255, 0.35); border-radius: 3px; }
+
+/* The math keyboard */
+.rt-keys {
+  padding: 8px 10px 10px; background: #d5d9e2; border-top: 1px solid rgba(29, 36, 51, 0.12);
+  font-family: ui-rounded, 'SF Pro Rounded', -apple-system, 'Segoe UI', sans-serif;
+}
+.rt-tabs { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.rt-tabs button { height: 32px; padding: 0 14px; border: 0; border-radius: 10px; background: transparent; color: #3a4256; font: 700 14px/1 inherit; font-family: inherit; cursor: pointer; }
+.rt-tabs button.on { background: #2f6bff; color: #fff; }
+.rt-tabs span { margin-left: auto; font-size: 12.5px; color: #5b6478; text-align: right; }
+.rt-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; }
+.rt-grid button {
+  height: 50px; min-width: 0; padding: 0; border: 0; border-radius: 10px; cursor: pointer;
+  background: #fff; color: #1d2433; box-shadow: 0 1px 0 rgba(29, 36, 51, 0.25);
+  font: 500 21px/1 'Cambria Math', 'STIX Two Math', 'Times New Roman', serif;
+  -webkit-user-select: none; user-select: none; touch-action: manipulation;
+}
+.rt-grid button:active { background: #e8edf8; }
+.rt-grid .op { background: #f5f7fb; }
+.rt-grid .tpl { background: #eef3ff; color: #2f6bff; font-size: 19px; }
+.rt-grid .go { background: #2f6bff; color: #fff; font: 700 15px/1 ui-rounded, -apple-system, 'Segoe UI', sans-serif; }
+.rt-grid [data-key="back"], .rt-grid [data-key="left"], .rt-grid [data-key="right"] { font-family: ui-rounded, -apple-system, 'Segoe UI', sans-serif; }
+
+/* Narrow screens: the math keys scroll sideways in two rows of bigger keys */
+@media (max-width: 700px) {
+  .rt-tabs span { display: none; }
+  .rt-grid { grid-template-columns: none; grid-auto-flow: column; grid-template-rows: repeat(3, 46px); grid-auto-columns: 46px; overflow-x: auto; scrollbar-width: none; }
+  .rt-grid::-webkit-scrollbar { display: none; }
+  .rt-grid button { height: 46px; }
+}
+
+/* Links (the teacher's boards): the Link palette, and links in the words being typed. */
+.rt-text a { text-decoration: underline; cursor: text; }
+.rt-link-row { display: flex; gap: 6px; }
+.rt-href { width: 260px; min-height: 36px; padding: 0 10px; border: 1px solid rgba(29, 36, 51, 0.18); border-radius: 9px; font: inherit; font-size: 14px; }
+.rt-link-add { min-height: 36px; padding: 0 14px; border: 0; border-radius: 9px; background: #2f6bff; color: #fff; font-weight: 700; }
+.rt-link-remove { margin-top: 8px; min-height: 32px; padding: 0 12px; border: 0; border-radius: 9px; background: #fdecec; color: #c92a2a; font-weight: 600; }
+.rt-link-tip { margin: 8px 2px 0; font-size: 12px; color: #5b6478; }
+.rt-linkbtn { font-size: 16px !important; }

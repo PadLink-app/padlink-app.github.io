@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Only this site's own files; no outside scripts, fonts or trackers. Boards stay on this device until sent, and
+     go only to a PC you paired, through its Remote mode link (*.devtunnels.ms). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.devtunnels.ms; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PadLink Go">
+<meta name="theme-color" content="#2f6bff">
+<title>PadLink Go</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="go.css">
+</head>
+<body>
+  <header class="bar">
+    <img class="logo" src="brand-symbol.png" alt="">
+    <div class="title">
+      <h1><img class="wordmark" src="brand-go.png" alt="PadLink Go"></h1>
+      <p id="where">Your prepared boards, kept on this device · <button id="pcBtn" class="link">Connect to your PC</button></p>
+    </div>
+    <div class="actions">
+      <button id="helpOpen" class="btn round" aria-label="Help">?</button>
+      <button id="moreBtn" class="btn round phone-only" aria-label="More">⋯</button>
+      <button id="controlPc" class="btn control" hidden>Control the PC</button>
+      <button id="fromPc" class="btn wide-only" hidden>From the PC</button>
+      <button id="sendAll" class="btn" hidden>Send to PC</button>
+      <button id="openFile" class="btn wide-only">Open a board file</button>
+      <button id="newBoard" class="btn primary">New board</button>
+    </div>
+  </header>
+
+  <div id="install" class="banner" hidden>
+    <b>Add PadLink Go to your Home Screen</b> so it opens without internet and keeps your boards safe: tap Share, then <b>Add to Home Screen</b>.
+  </div>
+  <div id="stale" class="banner" hidden></div>
+  <div id="updateReady" class="banner blue" hidden>
+    A new version of PadLink Go is ready. <button id="restart" class="link">Restart now</button>
+  </div>
+
+  <main>
+    <div id="empty" class="empty" hidden>
+      <div class="empty-art" aria-hidden="true"></div>
+      <h2>No boards yet</h2>
+      <p>Make a new board and draw, type and add pictures, even with no internet. Or open a .padlink board file from Files, Google Drive, AirDrop or email.</p>
+      <p class="help-hint">New here? Tap <b>?</b> at the top for how it works, and how to send boards to your classroom PC.</p>
+    </div>
+    <div id="boards" class="grid"></div>
+  </main>
+
+  <footer id="storage" class="storage"></footer>
+
+  <!-- Small dialogs: a name, a choice, a message -->
+  <div id="dialog" class="dialog" hidden role="dialog" aria-modal="true">
+    <form id="dialogForm" class="dialog-card">
+      <h2 id="dialogTitle"></h2>
+      <p id="dialogText"></p>
+      <input id="dialogInput" maxlength="80" autocomplete="off">
+      <div class="dialog-buttons">
+        <button type="button" id="dialogCancel" class="btn">Cancel</button>
+        <button type="submit" id="dialogOk" class="btn primary">OK</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Pairing with the classroom PC (once), and how it stands -->
+  <div id="pairDialog" class="dialog" hidden role="dialog" aria-modal="true">
+    <div class="dialog-card wide">
+      <section id="pairStart">
+        <h2>Connect to your PC</h2>
+        <ol class="pair-steps">
+          <li>On the PC, open <b>PadLink</b> with <b>Remote mode</b> on: it shows a QR code.</li>
+          <li>Tap <b>Scan the PC’s code</b> and point this device at it.</li>
+          <li>Click <b>Allow</b> on the PC.</li>
+        </ol>
+        <button id="pairScan" class="btn primary scan-btn">Scan the PC’s code</button>
+        <div id="scanBox" class="scan-box" hidden>
+          <video id="scanVideo" playsinline muted autoplay></video>
+          <p id="scanHint">Point at the QR code in PadLink’s window</p>
+        </div>
+        <details class="pair-other">
+          <summary>Have a pairing link instead?</summary>
+          <div class="pair-paste">
+            <button id="pairPaste" class="btn">Paste</button>
+            <input id="pairInput" placeholder="…or paste the link here" autocomplete="off" spellcheck="false">
+          </div>
+        </details>
+        <div id="pairSaved" class="pair-saved" hidden>
+          <h3>Paired PCs</h3>
+          <div id="pairSavedList" class="pair-saved-list"></div>
+        </div>
+      </section>
+      <section id="pairWait" hidden>
+        <h2>Allow on the PC</h2>
+        <p>The PC is asking whether to allow this device. Click <b>Allow</b> if it shows this number:</p>
+        <p id="pairPin" class="pin"></p>
+      </section>
+      <section id="pairDone" hidden>
+        <h2 id="pairDoneTitle">Paired</h2>
+        <p id="pairDoneText"></p>
+        <button id="pairControl" class="btn control scan-btn" hidden>Control the PC</button>
+        <label id="autoControlRow" class="auto-row" hidden><input type="checkbox" id="autoControl"> Open on this PC by itself when PadLink Go starts (if it can reach it)</label>
+        <div class="pair-paste">
+          <button id="pairCheck" class="btn">Check the connection</button>
+          <button id="pairAnother" class="btn">Connect to another PC</button>
+          <button id="pairForget" class="btn danger-text">Forget this PC</button>
+        </div>
+      </section>
+      <p id="pairMsg" class="pair-msg" hidden></p>
+      <div class="dialog-buttons">
+        <button type="button" id="pairClose" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- The PC's boards: save a copy on this device (stage 8e) -->
+  <div id="fromPcDialog" class="dialog" hidden role="dialog" aria-modal="true" aria-labelledby="fromPcTitle">
+    <div class="dialog-card wide help-card-go">
+      <h2 id="fromPcTitle">Boards on the PC</h2>
+      <p id="fromPcText" class="pc-text">Tap one to keep a copy on this device: change it anywhere, even offline, then send it back.</p>
+      <div id="fromPcList" class="help-scroll pc-list"></div>
+      <div class="dialog-buttons">
+        <button type="button" id="fromPcClose" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How PadLink Go works -->
+  <div id="helpDialog" class="dialog" hidden role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="dialog-card wide help-card-go">
+      <h2 id="helpTitle">How PadLink Go works</h2>
+      <div class="help-scroll">
+        <h3>One app for your iPad or iPhone</h3>
+        <p>PadLink Go controls your classroom PC and prepares lessons anywhere, even with no internet. It opens on your boards; tap <b>Control the PC</b> when you're ready (or switch on <b>Open on this PC by itself</b> under <b>Connect to your PC</b>). In the control screen, <b>Boards</b> at the top left comes back here: the PC stays paired, so <b>Control the PC</b> connects again without Allow.</p>
+        <h3>Open it from the Home Screen</h3>
+        <p>In Safari, tap Share → <b>Add to Home Screen</b>, and always open PadLink Go from there. It then works offline, and your boards are kept safe. (Boards made in a Safari tab are kept apart, and Safari may clear them after a week without use.)</p>
+        <h3>Making a board</h3>
+        <p><b>New board</b>, then the same tools as on the PC: pens, highlighter, shapes, text, math, sticky notes, pages and backgrounds. On an iPad, draw with Apple Pencil; drag with a finger to move the page and pinch to zoom (with <b>Select</b>, a finger on what's selected moves or resizes it). The Fingers choice in the Control the PC screen applies here too (phones default to using a finger like the Pencil). <b>Add</b> puts in a photo, a screenshot (from Photos), a picture or <b>PDF worksheet</b> from Files (choose its pages), or takes a photo with the camera. <b>Add → Google Drive</b> brings in a picture, PDF, or Google Slides, Docs or Sheets (as pages you pick): it needs the internet, but not the PC. The picture button (beside the bin) saves the page to Photos or Files. Everything saves itself. ✕ goes back to your boards.</p>
+        <h3>Sending to your PC</h3>
+        <p>Connect once: tap <b>Connect to your PC</b> at the top, scan the QR code in PadLink's window on the PC, and click <b>Allow</b> there. Use <b>Connect to another PC</b> to add another without forgetting this one; your paired PCs stay in the connection panel so you can switch between them. <b>Sent ✓</b> is shown for the PC you're using now. Then <b>Send to PC</b>: one board from its ⋯ menu, or all of them at the top. The PC needs PadLink running with <b>Remote mode</b> on.</p>
+        <p>Boards show <b>Sent ✓</b> once the PC has them, and <b>Changed since sent</b> after you change them. Sending again updates the PC's copy; if it was changed on the PC too, the new one arrives as a copy, so nothing is lost. <b>Open on the PC</b> (⋯ menu) sends a board and opens it on the whiteboard. <b>From the PC</b> keeps a copy of one of the PC's boards here.</p>
+        <h3>Keeping boards safe</h3>
+        <p>Boards are kept only on this device, in PadLink Go's own storage, until you send them. Deleting PadLink Go from the Home Screen deletes them. For a backup or to move a board, use <b>Share as a file</b> (⋯ menu) to Files, Google Drive or AirDrop; <b>Open a board file</b> brings one back, here or on the PC.</p>
+        <h3>More help</h3>
+        <p>The <a href="https://getpadlink.com/guide/planning.html" target="_blank" rel="noopener">PadLink guide</a> shows every step with pictures.</p>
+        <h3>Privacy</h3>
+        <p>PadLink Go has no accounts, ads or tracking. Your boards go only to a PC you paired, and that PC can only receive boards from it.</p>
+      </div>
+      <div class="dialog-buttons">
+        <button type="button" id="helpClose" class="btn primary">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- iPhone: the less-used buttons of the top bar -->
+  <div id="headMenu" class="menu" hidden>
+    <button data-head="frompc" hidden>From the PC</button>
+    <button data-head="openfile">Open a board file</button>
+    <button data-head="help">How PadLink Go works</button>
+  </div>
+
+  <!-- A board's menu -->
+  <div id="menu" class="menu" hidden>
+    <button data-act="send">Send to PC</button>
+    <button data-act="openpc" hidden>Open on the PC</button>
+    <button data-act="open">Open</button>
+    <button data-act="rename">Rename</button>
+    <button data-act="duplicate">Duplicate</button>
+    <button data-act="share">Share as a file</button>
+    <button data-act="delete" class="danger">Delete</button>
+  </div>
+
+  <input id="fileInput" type="file" hidden>
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="store.js"></script>
+  <script src="rich.js"></script>
+  <script src="engine.js"></script>
+  <script src="jsqr/jsQR.js"></script>
+  <script src="go.js"></script>
+</body>
+</html>

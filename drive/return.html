@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Back from Google Drive: this page may also talk to Google's file download (the file picked, with its own pass). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://www.googleapis.com https://*.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PadLink Go">
+<link rel="icon" href="/icon-192.png">
+<title>PadLink Go</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #eef1f7; color: #1d2433; font: 17px/1.45 -apple-system, system-ui, "Segoe UI", sans-serif; }
+  .card { width: min(440px, calc(100vw - 32px)); padding: 28px; border-radius: 22px; background: #fff; text-align: center; box-shadow: 0 16px 40px rgba(29, 36, 51, 0.12); }
+  .card img { height: 52px; }
+  h1 { margin: 14px 0 6px; font-size: 20px; }
+  p { margin: 0 0 16px; color: #5b6478; }
+  button { min-height: 48px; padding: 0 22px; border: 0; border-radius: 14px; background: #2f6bff; color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+  button[hidden] { display: none; }
+  .problem h1 { color: #b42318; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <img src="/brand-symbol.png" alt="PadLink Go">
+    <h1 id="title">Getting your file from Google Drive…</h1>
+    <p id="text"></p>
+    <button id="back" hidden>Back to your board</button>
+  </div>
+  <script src="/store.js"></script>
+  <script src="/drive-return.js"></script>
+</body>
+</html>

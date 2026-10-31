@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.devtunnels.ms; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PadLink Go">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png">
+  <title>PadLink Go</title>
+  <link rel="stylesheet" href="/board.css">
+  <link rel="stylesheet" href="/rich.css">
+  <link rel="stylesheet" href="/drive.css">
+</head>
+<body>
+  <!-- Icons (paths after Lucide, ISC licence) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="b-select" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2-2 6Z"/></symbol>
+      <symbol id="b-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+      <symbol id="b-highlighter" viewBox="0 0 24 24"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></symbol>
+      <symbol id="b-line" viewBox="0 0 24 24"><path d="M4 20 20 4"/></symbol>
+      <symbol id="b-arrow" viewBox="0 0 24 24"><path d="M4 20 19 5"/><path d="M11 5h8v8"/></symbol>
+      <symbol id="b-rect" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1.5"/></symbol>
+      <symbol id="b-ellipse" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8.5" ry="6.5"/></symbol>
+      <symbol id="b-text" viewBox="0 0 24 24"><path d="M5 6V4h14v2"/><path d="M12 4v16"/><path d="M9 20h6"/></symbol>
+      <symbol id="b-note" viewBox="0 0 24 24"><path d="M5 4h14v10l-6 6H5Z"/><path d="M13 20v-6h6"/></symbol>
+      <symbol id="b-math" viewBox="0 0 24 24"><path d="M3 13h3l3 7 5-16h7"/><path d="m14 12 6 6M20 12l-6 6"/></symbol>
+      <symbol id="b-laser" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+      <symbol id="b-eraser" viewBox="0 0 24 24"><path d="m7 21-4.3-4.3a2.4 2.4 0 0 1 0-3.4l9.6-9.6a2.4 2.4 0 0 1 3.4 0l5.6 5.6a2.4 2.4 0 0 1 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></symbol>
+      <symbol id="b-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+      <symbol id="b-redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></symbol>
+      <symbol id="b-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+      <symbol id="b-import" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></symbol>
+      <symbol id="b-capture" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="b-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></symbol>
+      <symbol id="b-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+      <symbol id="b-full" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></symbol>
+      <symbol id="b-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="b-rotl" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/></symbol>
+      <symbol id="b-rotr" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></symbol>
+      <symbol id="b-dup" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+      <symbol id="b-front" viewBox="0 0 24 24"><rect x="3" y="3" width="12" height="12" rx="2"/><rect x="9" y="9" width="12" height="12" rx="2" fill="currentColor"/></symbol>
+      <symbol id="b-back" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><rect x="3" y="3" width="12" height="12" rx="2" fill="currentColor"/></symbol>
+      <symbol id="b-group" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke-dasharray="3 3"/><rect x="7" y="7" width="6" height="6" rx="1"/><circle cx="15.5" cy="15.5" r="2.5"/></symbol>
+      <symbol id="b-ungroup" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><circle cx="17" cy="17" r="4"/><path d="M14 4h4a2 2 0 0 1 2 2v4M4 14v4a2 2 0 0 0 2 2h4" stroke-dasharray="2 2.5"/></symbol>
+      <symbol id="b-chev-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="b-chev-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="b-timer" viewBox="0 0 24 24"><path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/></symbol>
+      <symbol id="b-prev" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="b-next" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="b-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="b-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+      <symbol id="b-window" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></symbol>
+      <symbol id="b-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></symbol>
+      <symbol id="b-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
+      <symbol id="b-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/></symbol>
+      <symbol id="b-pencil-line" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+      <symbol id="b-darrow" viewBox="0 0 24 24"><path d="M5 19 19 5"/><path d="M12 5h7v7"/><path d="M12 19H5v-7"/></symbol>
+      <symbol id="b-triangle" viewBox="0 0 24 24"><path d="M12 4 21 19H3Z"/></symbol>
+      <symbol id="b-rtriangle" viewBox="0 0 24 24"><path d="M4 4v16h16Z"/><path d="M4 16h4v4"/></symbol>
+      <symbol id="b-pentagon" viewBox="0 0 24 24"><path d="M12 3l9 6.5-3.4 10.5H6.4L3 9.5Z"/></symbol>
+      <symbol id="b-polygon" viewBox="0 0 24 24"><path d="M8.3 3h7.4L21 8.3v7.4L15.7 21H8.3L3 15.7V8.3Z"/></symbol>
+      <symbol id="b-hexagon" viewBox="0 0 24 24"><path d="M12 2.5l8.5 4.9v9.2L12 21.5l-8.5-4.9V7.4Z"/></symbol>
+      <symbol id="b-fcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/><path d="M12 12V3a9 9 0 0 1 9 9Z" fill="currentColor" fill-opacity="0.35" stroke="none"/></symbol>
+      <symbol id="b-fbar" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="1"/><path d="M7 7v10M12 7v10M17 7v10"/><rect x="2" y="7" width="10" height="10" fill="currentColor" fill-opacity="0.35" stroke="none"/></symbol>
+      <symbol id="b-numline" viewBox="0 0 24 24"><path d="M2 12h20"/><path d="M5 9v6M10 9v6M14 9v6M19 9v6"/></symbol>
+      <symbol id="b-axes" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M12 21V3"/><path d="m18 9 3 3-3 3"/><path d="m9 6 3-3 3 3"/></symbol>
+      <symbol id="b-marker" viewBox="0 0 24 24"><path d="m15 4 5 5-9 9H6v-5Z"/><path d="M6 18 3 21"/><path d="m12 7 5 5"/></symbol>
+      <symbol id="b-pencil" viewBox="0 0 24 24"><path d="M18 3l3 3L8 19l-5 2 2-5Z"/><path d="m15 6 3 3"/><path d="m5 16 3 3"/></symbol>
+      <symbol id="b-crayon" viewBox="0 0 24 24"><path d="M14 4h4v10l-2 6-2-6Z"/><path d="M14 9h4"/><path d="M5 20c2-3 4-5 6-6"/></symbol>
+      <symbol id="b-chalk" viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="6" rx="2" transform="rotate(-30 12 12)"/><path d="M4 21h4M10 21h2"/></symbol>
+      <symbol id="b-open" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1"/><path d="M3 7v10a2 2 0 0 0 2 2h12l4-9H7l-4 9"/></symbol>
+      <symbol id="b-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- Top bar -->
+  <header id="bar">
+    <button id="boardsBtn" class="pillbtn" title="Boards: saved automatically on this PC"><svg class="i"><use href="#b-folder"/></svg><span id="boardName">Board</span> <small id="saveState"></small></button>
+    <span class="vsep"></span>
+    <button id="undo" class="ib" title="Undo (Ctrl+Z)" aria-label="Undo"><svg class="i"><use href="#b-undo"/></svg></button>
+    <button id="redo" class="ib" title="Redo (Ctrl+Y)" aria-label="Redo"><svg class="i"><use href="#b-redo"/></svg></button>
+    <span class="spacer"></span>
+    <button id="import" class="pillbtn" title="Import PDFs and pictures"><svg class="i"><use href="#b-import"/></svg>Import</button>
+    <button id="driveBtn" class="pillbtn" title="Google Drive: search your Drive and put a file on the board"><span id="driveLogo" class="drive-logo"></span>Drive</button>
+    <button id="classBtn" class="pillbtn" title="Class tools: countdown timer, name picker and students (also on the iPad and iPhone)"><svg class="i"><use href="#b-timer"/></svg><span id="classLabel">Class</span><span id="classBadge" class="time-badge" hidden></span></button>
+    <button id="capture" class="pillbtn" title="Capture the PC screen, a window or a web page"><svg class="i"><use href="#b-capture"/></svg>Capture</button>
+    <select id="background" title="Page background" aria-label="Page background">
+      <option value="white">Plain</option>
+      <option value="grid">Grid</option>
+      <option value="lines">Lines</option>
+      <option value="dots">Dots</option>
+      <option value="dark">Chalkboard</option>
+    </select>
+    <button id="delete" class="ib" title="Delete the selection, or clear the drawings (Del). Click again for the page picture; hold for both." aria-label="Delete or clear"><svg class="i"><use href="#b-trash"/></svg></button>
+    <button id="save" class="ib" title="Save this page as a picture" aria-label="Save this page as a picture"><svg class="i"><use href="#b-image"/></svg></button>
+    <span class="vsep"></span>
+    <button id="settingsBtn" class="ib" title="Settings: PadLink's settings on this PC" aria-label="Settings"><svg class="i"><use href="#b-gear"/></svg></button>
+    <button id="helpBtn" class="ib" title="Tips and shortcuts" aria-label="Tips and shortcuts"><b class="q">?</b></button>
+    <button id="fullscreen" class="ib" title="Full screen / window (F11)" aria-label="Full screen"><svg class="i"><use href="#b-full"/></svg></button>
+    <button id="close" class="ib" title="Hide the whiteboard (it keeps your pages)" aria-label="Hide the whiteboard"><svg class="i"><use href="#b-close"/></svg></button>
+  </header>
+
+  <!-- Tool rail (left) -->
+  <nav id="rail" aria-label="Tools">
+    <button data-tool="select" title="Select, move and resize (V)" aria-label="Select"><svg class="i"><use href="#b-select"/></svg></button>
+    <button data-tool="pen" class="on" title="Pen (P)" aria-label="Pen"><svg class="i"><use href="#b-pen"/></svg></button>
+    <button data-tool="highlighter" title="Highlighter (H)" aria-label="Highlighter"><svg class="i"><use href="#b-highlighter"/></svg></button>
+    <button id="shapesBtn" title="Shapes: lines, arrows, shapes, fractions, number lines" aria-label="Shapes"><svg class="i"><use id="shapesIcon" href="#b-rect"/></svg></button>
+    <button data-tool="text" title="Text: tap the board to type (T)" aria-label="Text"><svg class="i"><use href="#b-text"/></svg></button>
+    <button data-tool="math" title="Math: fractions, powers, roots and symbols (M)" aria-label="Math"><svg class="i"><use href="#b-math"/></svg></button>
+    <button data-tool="note" title="Sticky note: tap the board to put one there, then type (N)" aria-label="Sticky note"><svg class="i"><use href="#b-note"/></svg></button>
+    <button data-tool="eraser" title="Eraser: removes whole strokes and shapes (E)" aria-label="Eraser"><svg class="i"><use href="#b-eraser"/></svg></button>
+    <button data-tool="laser" title="Laser pointer: hold the mouse button down, or touch the board, to point without drawing (K)" aria-label="Laser pointer"><svg class="i"><use href="#b-laser"/></svg></button>
+    <button id="toolsHide" class="tools-hide" title="Hide the tools: the iPad or iPhone has its own (the arrow at the left brings them back)" aria-label="Hide the tools" hidden><svg class="i"><use href="#b-chev-left"/></svg></button>
+  </nav>
+
+  <!-- Over a selection (Select tool): change it without the eraser -->
+  <div id="selBar" class="sel-bar" hidden>
+    <button data-selpop="color" id="selColorBtn" title="Border color and thickness"><span class="sel-dot" id="selColorDot"></span><span id="selColorLabel">Border</span></button>
+    <button data-selpop="fill" id="selFillBtn" title="Fill"><span class="sel-dot sel-fill" id="selFillDot"></span>Fill</button>
+    <button data-selop="group" id="selGroupBtn" title="Group: they move, turn and resize as one (Ctrl+G)"><svg class="i"><use href="#b-group"/></svg>Group</button>
+    <button data-selop="ungroup" id="selUngroupBtn" title="Ungroup: back into separate pieces (Ctrl+Shift+G)"><svg class="i"><use href="#b-ungroup"/></svg>Ungroup</button>
+    <span class="sel-sep"></span>
+    <button data-selop="turn" data-v="-15" title="Turn left 15° (or drag the round handle)" aria-label="Turn left"><svg class="i"><use href="#b-rotl"/></svg></button>
+    <button data-selop="turn" data-v="15" title="Turn right 15°" aria-label="Turn right"><svg class="i"><use href="#b-rotr"/></svg></button>
+    <button data-selop="dup" title="Duplicate (Ctrl+D)" aria-label="Duplicate"><svg class="i"><use href="#b-dup"/></svg></button>
+    <button data-selop="front" title="Bring to the front" aria-label="Bring to the front"><svg class="i"><use href="#b-front"/></svg></button>
+    <button data-selop="back" title="Send to the back" aria-label="Send to the back"><svg class="i"><use href="#b-back"/></svg></button>
+    <button data-selop="delete" class="sel-del" title="Delete (Del)" aria-label="Delete"><svg class="i"><use href="#b-trash"/></svg></button>
+  </div>
+  <div id="selPop" class="sel-pop" hidden></div>
+
+  <!-- While the tools are tucked away (an iPad or iPhone has its own): this brings them back -->
+  <button id="toolsTab" class="tools-tab" title="Show the drawing tools" aria-label="Show the drawing tools" hidden><svg class="i"><use href="#b-chev-right"/></svg></button>
+
+  <!-- Every shape, from the Shapes button -->
+  <div id="shapeFly" class="shape-fly" hidden>
+    <div class="fly-title">Lines</div>
+    <div class="fly-grid">
+      <button data-shape="line" title="Line (L)" aria-label="Line"><svg class="i"><use href="#b-line"/></svg></button>
+      <button data-shape="arrow" title="Arrow (A)" aria-label="Arrow"><svg class="i"><use href="#b-arrow"/></svg></button>
+      <button data-shape="darrow" title="Double arrow" aria-label="Double arrow"><svg class="i"><use href="#b-darrow"/></svg></button>
+      <button data-shape="numline" title="Number line" aria-label="Number line"><svg class="i"><use href="#b-numline"/></svg></button>
+      <button data-shape="axes" title="Coordinate axes" aria-label="Coordinate axes"><svg class="i"><use href="#b-axes"/></svg></button>
+    </div>
+    <div class="fly-title">Shapes</div>
+    <div class="fly-grid">
+      <button data-shape="rect" title="Rectangle (R)" aria-label="Rectangle"><svg class="i"><use href="#b-rect"/></svg></button>
+      <button data-shape="ellipse" title="Ellipse (O)" aria-label="Ellipse"><svg class="i"><use href="#b-ellipse"/></svg></button>
+      <button data-shape="triangle" title="Triangle" aria-label="Triangle"><svg class="i"><use href="#b-triangle"/></svg></button>
+      <button data-shape="rtriangle" title="Right triangle" aria-label="Right triangle"><svg class="i"><use href="#b-rtriangle"/></svg></button>
+      <button data-shape="pentagon" title="Pentagon" aria-label="Pentagon"><svg class="i"><use href="#b-pentagon"/></svg></button>
+      <button data-shape="hexagon" title="Hexagon" aria-label="Hexagon"><svg class="i"><use href="#b-hexagon"/></svg></button>
+      <button data-shape="polygon" title="Polygon: choose 3 to 12 sides in the side panel" aria-label="Polygon"><svg class="i"><use href="#b-polygon"/></svg></button>
+    </div>
+    <div class="fly-title">Fractions <small>tap a section to shade it</small></div>
+    <div class="fly-grid">
+      <button data-shape="fcircle" title="Fraction circle" aria-label="Fraction circle"><svg class="i"><use href="#b-fcircle"/></svg></button>
+      <button data-shape="fbar" title="Fraction bar" aria-label="Fraction bar"><svg class="i"><use href="#b-fbar"/></svg></button>
+    </div>
+  </div>
+
+  <!-- Colors and sizes for the active tool (tap the active tool again to tuck this away) -->
+  <div id="stylePop">
+    <div id="media" aria-label="Pen type" hidden>
+      <button data-medium="pen" class="on" title="Pen" aria-label="Pen"><svg class="i"><use href="#b-pen"/></svg></button>
+      <button data-medium="marker" title="Marker" aria-label="Marker"><svg class="i"><use href="#b-marker"/></svg></button>
+      <button data-medium="pencil" title="Colored pencil" aria-label="Colored pencil"><svg class="i"><use href="#b-pencil"/></svg></button>
+      <button data-medium="crayon" title="Crayon" aria-label="Crayon"><svg class="i"><use href="#b-crayon"/></svg></button>
+      <button data-medium="chalk" title="Chalk" aria-label="Chalk"><svg class="i"><use href="#b-chalk"/></svg></button>
+    </div>
+    <div id="laserStyles" class="laser-styles" aria-label="Laser look" hidden>
+      <button data-lstyle="dot">Dot</button>
+      <button data-lstyle="saber">Light saber</button>
+      <button data-lstyle="spotlight">Spotlight</button>
+    </div>
+    <div id="swatches" aria-label="Colors"></div>
+    <label class="custom" title="Any color"><input type="color" id="customColor" value="#1f2328" aria-label="Any color"></label>
+    <div id="sizes" aria-label="Size">
+      <button data-size="0" title="Thin" aria-label="Thin"><i style="--d:6px"></i></button>
+      <button data-size="1" class="on" title="Medium" aria-label="Medium"><i style="--d:11px"></i></button>
+      <button data-size="2" title="Thick" aria-label="Thick"><i style="--d:18px"></i></button>
+    </div>
+    <div id="partsBox" hidden>
+      <span class="parts-label" id="partsLabel">Parts</span>
+      <div class="parts-row">
+        <button id="partsMinus" aria-label="Fewer parts">−</button>
+        <b id="partsN">4</b>
+        <button id="partsPlus" aria-label="More parts">+</button>
+      </div>
+      <label id="fracRow" class="frac-row" hidden><input type="checkbox" id="fracLabels"> 1/2, 1/4…</label>
+    </div>
+  </div>
+
+  <!-- Pages (bottom) -->
+  <div id="pagebar">
+    <button id="prev" class="ib" title="Previous page (PgUp)" aria-label="Previous page"><svg class="i"><use href="#b-prev"/></svg></button>
+    <button id="pageNo" title="Page menu: add, duplicate, delete, pictures/backgrounds">1 / 1</button>
+    <button id="next" class="ib" title="Next page (PgDn)" aria-label="Next page"><svg class="i"><use href="#b-next"/></svg></button>
+    <button id="addPage" class="addbtn" title="New page after this one"><svg class="i"><use href="#b-plus"/></svg>Page</button>
+    <span id="zoomBox" role="group" aria-label="Zoom">
+      <button id="zoomOut" title="Zoom out (Ctrl −)" aria-label="Zoom out">−</button>
+      <button id="zoomReset" title="Zoom: tap to see the whole page (Ctrl+0)">100%</button>
+      <button id="zoomIn" title="Zoom in (Ctrl +)" aria-label="Zoom in">+</button>
+    </span>
+  </div>
+
+  <div id="browserZoom" role="status" hidden>
+    <span>The whole screen is zoomed. Press <kbd>Ctrl</kbd> and <kbd>0</kbd> to put it back.</span>
+    <button id="browserZoomOk">OK</button>
+  </div>
+
+  <main id="area">
+    <div id="page">
+      <canvas id="base"></canvas>
+      <canvas id="live"></canvas>
+      <div id="scrollbar" hidden><i></i></div>
+      <div id="textEdit"></div>
+    </div>
+  </main>
+  <div id="textKeys"></div>
+
+  <div id="picker" hidden>
+    <div class="sheet">
+      <header>
+        <h2 id="pickerTitle">Import PDF</h2>
+        <div class="row">
+          <button id="pickAll">All</button>
+          <button id="pickNone">None</button>
+          <input id="pickRange" placeholder="Pages, e.g. 1-3, 5" spellcheck="false">
+        </div>
+        <div class="row">
+          <label><input type="radio" name="placement" value="pages" checked> Each page as a new whiteboard page</label>
+          <label><input type="radio" name="placement" value="images"> As pictures on this page</label>
+        </div>
+      </header>
+      <div id="thumbs"></div>
+      <footer>
+        <span id="pickCount"></span>
+        <button id="pickCancel">Cancel</button>
+        <button id="pickAdd" class="primary">Add</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Capture menu: from the Capture button -->
+  <div id="captureMenu" class="menu" hidden>
+    <div class="menu-title">Add to the whiteboard</div>
+    <button data-capture="screen"><svg class="i"><use href="#b-monitor"/></svg><span><b>PC screen</b><small>What's on the screen behind the board, such as a slide or website</small></span></button>
+    <button data-capture="window"><svg class="i"><use href="#b-window"/></svg><span><b>A window…</b><small>Pick an open app (Chrome, PowerPoint…). Works for pages you're signed in to.</small></span></button>
+    <button data-capture="web"><svg class="i"><use href="#b-globe"/></svg><span><b>A web page…</b><small>Type an address. The whole page, top to bottom.</small></span></button>
+    <div class="menu-row">
+      <span>Add as</span>
+      <div class="seg-mini" id="placement">
+        <button data-place="page" class="on">New page</button>
+        <button data-place="image">Picture on this page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boards menu: saved boards, autosaved to %LocalAppData%\PadLink\Boards -->
+  <div id="boardsMenu" class="menu wide" hidden>
+    <div class="menu-title">This board</div>
+    <div class="current-board"><b id="currentBoard">Board</b><small>Saved automatically as you work</small></div>
+    <button id="renameBoard"><svg class="i"><use href="#b-pencil-line"/></svg><span><b>Rename this board</b></span></button>
+    <button id="newBoard"><svg class="i"><use href="#b-plus"/></svg><span><b>New board</b><small>This one stays saved; open it again any time</small></span></button>
+    <button id="copyBoard"><svg class="i"><use href="#b-copy"/></svg><span><b>Save a copy</b><small>A copy to keep as it is now; you carry on with this one</small></span></button>
+    <button id="exportBoard"><svg class="i"><use href="#b-folder"/></svg><span><b>Save as a file…</b><small>One .padlink file: keep it anywhere, email it, double-click to open</small></span></button>
+    <button id="importBoardFile"><svg class="i"><use href="#b-open"/></svg><span><b>Open a board file…</b><small>A .padlink file becomes a new board here</small></span></button>
+    <button id="goBoards"><svg class="i"><use href="#b-import"/></svg><span><b>Connect PadLink Go…</b><small>Your iPad or iPhone: control this PC, prepare boards anywhere and send them here</small></span></button>
+    <div class="menu-title">Open a board</div>
+    <div id="boardsList" class="list boards"></div>
+    <button id="openBoardsFolder"><svg class="i"><use href="#b-open"/></svg><span><b>Open the boards folder</b><small>PadLink's own folder on this PC (AppData\Local\PadLink\Boards)</small></span></button>
+  </div>
+
+  <!-- Page menu: from the page number -->
+  <!-- Pages: from the page number. Every page as a picture: click to go there, drag to move it; and this page's actions -->
+  <div id="pageMenu" class="pages-panel" hidden>
+    <div class="pp-head">
+      <b>Pages</b><span id="ppCount"></span>
+      <div class="pp-acts">
+        <button id="pmNew"><svg class="i"><use href="#b-plus"/></svg>New page</button>
+        <button id="pmDuplicate"><svg class="i"><use href="#b-copy"/></svg>Duplicate</button>
+        <button id="pmUnlockDoc" title="Make the page picture movable: then move, resize or delete it with Select"><svg class="i"><use href="#b-image"/></svg>Picture movable</button>
+        <button id="pmRemoveDoc" title="Remove the captured or imported picture behind the drawings (Undo brings it back)"><svg class="i"><use href="#b-scissors"/></svg>Remove picture</button>
+        <button id="pmPoll" title="A poll for this page: prepare it now, start it with one tap in the lesson"><span class="pm-emoji">📊</span><b>Poll</b></button>
+        <button id="pmPaste" title="Paste a list of questions: each becomes a page with its poll ready"><span class="pm-emoji">📋</span>Paste questions</button>
+        <button id="pmDelete" class="danger"><svg class="i"><use href="#b-trash"/></svg><b>Delete page</b></button>
+      </div>
+      <button id="ppClose" class="pp-close" aria-label="Close"><svg class="i"><use href="#b-close"/></svg></button>
+    </div>
+    <div class="pp-strip" id="ppStrip" role="listbox" aria-label="Pages"></div>
+    <div class="pp-hint">Click a page to go to it. Drag a page to move it (on a touch screen: hold it, then drag).</div>
+  </div>
+
+  <!-- Class tools: the same panel as on the iPad and iPhone (class.js); the PC runs both tools and keeps them in step -->
+  <aside id="classSheet" class="class-sheet" aria-label="Class tools" hidden>
+    <header>
+      <div class="seg small" id="classTabs" role="tablist"></div>
+      <button id="classClose" class="class-close" aria-label="Close class tools"><svg class="i"><use href="#b-close"/></svg></button>
+    </header>
+    <div class="class-body" id="classBody"></div>
+  </aside>
+
+  <!-- Settings: PadLink's settings on the PC (pcsettings.js; the same as the PC window's ⚙ Settings and the iPad's "On the PC") -->
+  <aside id="setSheet" class="class-sheet set-sheet" aria-label="Settings" hidden>
+    <header>
+      <h2 class="set-title">Settings</h2>
+      <button id="setClose" class="class-close" aria-label="Close settings"><svg class="i"><use href="#b-close"/></svg></button>
+    </header>
+    <div class="class-body" id="setBody"></div>
+  </aside>
+
+  <div id="driveDialog" class="dialog" hidden>
+    <div class="sheet drive-sheet">
+      <header><h2>Add from Google Drive</h2><button id="driveClose" class="drive-close" aria-label="Close">×</button></header>
+      <div class="drive-place" role="radiogroup" aria-label="Where it goes">
+        <button data-dplace="page" class="on">As a new page</button>
+        <button data-dplace="image">On this page</button>
+      </div>
+      <p class="sub drive-note">Google Drive opens in your web browser. Find your file in your folders, Shared with me or shared drives, or search for it. PadLink only gets the file you pick, and it comes back here.</p>
+      <footer><button id="driveOpen" class="primary drive-open"><span id="driveOpenLogo"></span>Choose from Google Drive</button></footer>
+    </div>
+  </div>
+
+  <!-- A poll for this page: prepared ahead, started with one tap during the lesson -->
+  <div id="pollDialog" class="dialog" hidden>
+    <div class="sheet small poll-edit">
+      <header>
+        <h2>Poll for this page</h2>
+        <p class="sub">Prepare it now; in the lesson, <b>Start this page’s poll</b> appears on this page. Students answer on their Chromebooks.</p>
+      </header>
+      <div class="body">
+        <label class="pe-label" for="peQuestion">Question <span>(optional: also shown on their screens)</span></label>
+        <input id="peQuestion" class="pe-input" maxlength="200" autocomplete="off" placeholder="Or just write it on the page">
+        <div class="pe-label">Answers</div>
+        <div class="pe-kinds" id="peKind">
+          <button data-pk="2">A–B</button><button data-pk="3">A–C</button><button data-pk="4">A–D</button><button data-pk="5">A–E</button>
+          <button data-pk="tf" class="wide">True / False</button><button data-pk="yn" class="wide">Yes / No</button>
+        </div>
+        <div class="pe-label">Words for each answer <span>(optional) and ✓ the correct one (optional, shown only when you show the results)</span></div>
+        <div id="peAnswers" class="pe-answers"></div>
+        <div class="pe-label">Time limit</div>
+        <div class="pe-kinds" id="peTime"><button data-ps="0">No limit</button><button data-ps="30">0:30</button><button data-ps="60">1:00</button><button data-ps="120">2:00</button></div>
+        <label class="pe-check" id="peShuffleRow"><input type="checkbox" id="peShuffle"> Shuffle the answers on each Chromebook <span>(each student’s buttons in a different order; A is still A)</span></label>
+      </div>
+      <footer>
+        <button id="peRemove" class="pe-remove">Remove the poll</button>
+        <span class="pe-gap"></span>
+        <button id="peCancel">Cancel</button>
+        <button id="peSave" class="primary">Save</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Paste questions: each becomes a new page, with the question and answers written on it and its poll ready -->
+  <div id="pasteDialog" class="dialog" hidden>
+    <div class="sheet small poll-edit">
+      <header>
+        <h2>Paste questions as polls</h2>
+        <p class="sub">One question per block: the question, then each answer on its own line. Put <b>*</b> before the correct answer (optional). Leave a blank line between questions. A question on one line also works: <i>What is 3×4? / 7 / *12 / 34</i>. Each one becomes a new page after this one.</p>
+      </header>
+      <div class="body">
+        <textarea id="pqText" class="pe-input pq-text" rows="9" spellcheck="false" placeholder="What is 3 × 4?&#10;7&#10;*12&#10;34&#10;&#10;The Sun is a star.&#10;*True&#10;False"></textarea>
+        <p class="sub" id="pqNote"></p>
+        <div class="pe-label">Time limit for each</div>
+        <div class="pe-kinds" id="pqTime"><button data-ps="0">No limit</button><button data-ps="30">0:30</button><button data-ps="60">1:00</button><button data-ps="120">2:00</button></div>
+        <label class="pe-check"><input type="checkbox" id="pqShuffle"> Shuffle the answers on each Chromebook <span>(lettered questions)</span></label>
+      </div>
+      <footer>
+        <button id="pqCancel">Cancel</button>
+        <button id="pqAdd" class="primary">Add the pages</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="windowsDialog" class="dialog" hidden>
+    <div class="sheet small">
+      <header><h2>Capture a window</h2></header>
+      <div id="windowList" class="list"></div>
+      <footer><button id="windowsCancel">Cancel</button></footer>
+    </div>
+  </div>
+
+  <!-- PadLink Go: pair the teacher's iPad or iPhone, so boards prepared there can be sent to this PC -->
+  <div id="goDialog" class="dialog" hidden>
+    <div class="sheet small go-pair">
+      <header>
+        <h2>Connect PadLink Go</h2>
+        <p class="sub">PadLink Go on your iPad or iPhone controls this PC and prepares boards anywhere, even offline; boards it sends appear in this Boards list. Connect each device once:</p>
+      </header>
+      <div class="body">
+        <div id="goPairBox" class="go-pair-box">
+          <img id="goQr" alt="QR code for pairing PadLink Go">
+          <ol>
+            <li>In <b>PadLink Go</b>, tap <b>Connect to your PC</b> → <b>Scan the PC’s code</b>, and scan this code.</li>
+            <li>Click <b>Allow</b> when this PC asks.</li>
+            <li>No PadLink Go yet? Scan this code with the iPad’s <b>Camera</b> app first: it shows how to add PadLink Go to the Home Screen.</li>
+          </ol>
+        </div>
+        <p id="goPairNote" class="sub"></p>
+        <div class="menu-title">Paired iPads and iPhones</div>
+        <div id="goDevices" class="list"></div>
+      </div>
+      <footer>
+        <button type="button" id="goNewCode">New code</button>
+        <button type="button" id="goClose" class="primary">Done</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="urlDialog" class="dialog" hidden>
+    <form class="sheet small" id="urlForm">
+      <header>
+        <h2>Capture a web page</h2>
+        <p class="sub">Loads the page in the background and captures it top to bottom. A long page becomes one tall whiteboard page that you scroll. Pages that need a sign-in won't show; capture their window instead.</p>
+        <p class="sub"><b>On the iPad:</b> tap Keys → <b>Type on the PC</b>, type the address, then <b>Type + ⏎</b>.</p>
+      </header>
+      <div class="body"><input id="urlInput" placeholder="example.com/article" autocomplete="off" spellcheck="false" inputmode="url"></div>
+      <footer>
+        <button type="button" id="urlCancel">Cancel</button>
+        <button type="submit" class="primary">Capture</button>
+      </footer>
+    </form>
+  </div>
+
+  <div id="boardHelp" class="dialog" hidden>
+    <div class="sheet help">
+      <header><h2>Whiteboard tips</h2></header>
+      <div class="help-wrap">
+        <!-- Topics on the left; one topic's tips on the right -->
+        <nav class="help-nav" aria-label="Topics">
+          <button data-topic="draw" class="on">Drawing tools</button>
+          <button data-topic="shapes">Shapes and fractions</button>
+          <button data-topic="text">Text and math</button>
+          <button data-topic="select">Select and edit</button>
+          <button data-topic="add">Adding things</button>
+          <button data-topic="pages">Pages</button>
+          <button data-topic="boards">Saving and boards</button>
+          <button data-topic="go">PadLink Go: prepare anywhere</button>
+          <button data-topic="students">Students</button>
+          <button data-topic="ipad">With the iPad or iPhone</button>
+          <button data-topic="keys">Keyboard shortcuts</button>
+        </nav>
+        <div class="help-pane">
+          <section data-topic="draw">
+            <div class="hb"><h4>The tools</h4><p>On the left. Pick a color and size in the panel beside them; click the active tool again to tuck the panel away.</p></div>
+            <div class="hb"><h4>Pen and highlighter</h4><p>The pen follows Pencil pressure. Pen types: pen, marker, colored pencil, crayon and chalk. The highlighter sits under the ink, so writing stays readable.</p></div>
+            <div class="hb"><h4>Eraser</h4><p>Removes whole strokes. The Pencil's Eraser on the iPad works too.</p></div>
+            <div class="hb"><h4>Laser</h4><p>Point without drawing: a dot, a fading trail, a light saber or a spotlight, in 8 colors. Students see it too while they follow your board, or while a board is on show.</p></div>
+          </section>
+          <section data-topic="shapes" hidden>
+            <div class="hb"><h4>Shapes</h4><p>One button on the rail: lines, arrows, number lines, axes, rectangles, ellipses, triangles, polygons (3 to 12 sides), fraction circles and bars.</p></div>
+            <div class="hb"><h4>Straight and square</h4><p>Hold <kbd>Shift</kbd> (Keys on the iPad) for straight angles, squares and circles.</p></div>
+            <div class="hb"><h4>Fractions</h4><p>Set <b>Parts</b>, draw a fraction circle or bar, then click a section with the Shapes tool to shade it. Number lines can count in whole numbers or fractions.</p></div>
+          </section>
+          <section data-topic="text" hidden>
+            <div class="hb"><h4>Text (T)</h4><p>Click the board and type. Select words for <b>bold</b>, <i>italic</i>, underline, text color, highlighting, font and size. The paragraph menu has left, center and right alignment, lists, indent and outdent. On an iPad, PadLink's controls stay below the text so the iPadOS Copy/Paste menu does not cover them. <kbd>Tab</kbd> indents a line; <kbd>Shift+Tab</kbd> moves it back. While typing, drag the handle on either side of the box to make it wider or narrower: the words wrap to fit (a long web address breaks at the edge). Click a text box again with Text, or double-click (double-tap) it with Select, to change it. On a student's board, words start at size 32 (48 on yours, to read from the back of the room).</p></div>
+            <div class="hb"><h4>Links</h4><p>In a text box, select some words, tap <b>🔗</b> and paste a web address (a Google Doc, Slides, a video). Or paste an address straight onto the board, or into a text box. With <b>Select</b>, click (tap) a link to open it: on this PC in your browser, on students' Chromebooks in a new tab. Links travel with Send page, team boards and what you write on students' boards (in Follow me they show, but open only from the student's own board). Only you can add links: students just open them.</p></div>
+            <div class="hb"><h4>Sticky notes (N)</h4><p>Pick a color, click the board, and type. Click a note again to add to it; a blank one stays. Select moves, resizes and recolors it (Fill).</p></div>
+            <div class="hb"><h4>Math (M)</h4><p>A math box with its own keyboard: fractions, powers, roots, ÷ × ≤ ≥ and more. In a text box, <b>√x</b> puts math inside the line.</p></div>
+          </section>
+          <section data-topic="select" hidden>
+            <div class="hb"><h4>Select (V)</h4><p>Click anything to select it, and drag to move it. Drag a corner to resize proportionally, an edge handle to change only its width or height (text: the side handles set how wide it is), or the round knob to rotate. Double-click (or double-tap) a text box to type in it.</p></div>
+            <div class="hb"><h4>Change it</h4><p>The bar above the selection changes border color, fill, thickness, and can duplicate, bring to front, send to back or delete. <kbd>Ctrl+C</kbd> and <kbd>Ctrl+V</kbd> copy and paste selected text, pictures, shapes, strokes or groups; Duplicate still works as before.</p></div>
+            <div class="hb"><h4>Several at once</h4><p>Drag a box around things, or <kbd>Ctrl</kbd>+click. <kbd>Ctrl+G</kbd> groups them, <kbd>Ctrl+Shift+G</kbd> ungroups.</p></div>
+          </section>
+          <section data-topic="add" hidden>
+            <div class="hb"><h4>Capture</h4><p>The PC screen behind the board, any open window, or a whole web page, from the Capture button at the top.</p></div>
+            <div class="hb"><h4>Import</h4><p>PDFs (pick pages, or type ranges like <code>1-3, 5</code>) and pictures.</p></div>
+            <div class="hb"><h4>Google Drive</h4><p>Opens Google's file picker in your browser. Docs, Slides and PDFs come in as pages you pick. In PadLink Go: <b>Add → Google Drive</b> (needs the internet, not the PC).</p></div>
+            <div class="hb"><h4>Paste</h4><p><kbd>Ctrl+V</kbd>: a copied PadLink object keeps its formatting, a copied picture goes on the page, and copied words become a text box.</p></div>
+          </section>
+          <section data-topic="pages" hidden>
+            <div class="hb"><h4>All your pages</h4><p>Click the <b>page number</b> to see every page as a picture. Click one to go there; drag one to move it.</p></div>
+            <div class="hb"><h4>Long pages</h4><p>Write near the bottom and the page grows taller. Scroll with the mouse wheel or <kbd>↑</kbd> <kbd>↓</kbd>.</p></div>
+            <div class="hb"><h4>Zoom</h4><p><b>−</b> and <b>+</b> at the bottom, <kbd>Ctrl</kbd> + mouse wheel (a pinch on a touchpad), <kbd>Ctrl +</kbd> / <kbd>Ctrl −</kbd>, or pinch on the iPad. On a touch screen (an interactive panel, a touch Chromebook), <b>two fingers</b> move the page and pinch to zoom; one finger draws. Tap the <b>%</b> between them, or press <kbd>Ctrl+0</kbd>, to see the whole page. These zoom the board only, never the whole screen, so the tools stay in reach. If the browser's own zoom changed anyway on a Chromebook, the board says how to put it back (<kbd>Ctrl+0</kbd>).</p></div>
+            <div class="hb"><h4>Clearing and backgrounds</h4><p>The trash clears drawings first, then pictures. Undo brings them back. Plain, grid, lined, dotted or chalkboard: top bar.</p></div>
+          </section>
+          <section data-topic="boards" hidden>
+            <div class="hb"><h4>Saves by itself</h4><p>Every change is saved on this PC a few seconds after you stop, and at once when you switch boards or close PadLink. Each time PadLink starts, you get a fresh board. Boards → Open the boards folder shows where they are; Save as a file keeps a copy anywhere you like.</p></div>
+            <div class="hb"><h4>Open an older board</h4><p>Click the board's name (top left) to rename it, start a new one, or open or delete older ones.</p></div>
+            <div class="hb"><h4>Save a copy</h4><p>In the same menu: keeps a second copy, so you can change one and keep the original.</p></div>
+            <div class="hb"><h4>A board as one file</h4><p><b>Save as a file</b> makes one .padlink file with every page and picture: keep it anywhere, email it. Double-click one (or <b>Open a board file</b>) to open it as a new board.</p></div>
+            <div class="hb"><h4>Save as a picture</h4><p>The picture button (top bar) saves the whole page, however tall.</p></div>
+            <div class="hb"><h4>Prepared on the iPad?</h4><p>Boards from <b>PadLink Go</b> arrive in this list. See <b>PadLink Go</b> in these tips.</p></div>
+          </section>
+          <section data-topic="go" hidden>
+            <div class="hb"><h4>One app for the iPad</h4><p><b>PadLink Go</b> controls this PC from your iPad or iPhone and prepares lessons anywhere, even offline. Open <b>padlink-app.github.io</b> in Safari (or scan the code in PadLink's window) and tap Share → <b>Add to Home Screen</b>.</p></div>
+            <div class="hb"><h4>Pencil and fingers</h4><p>On an iPad, the Pencil uses the chosen board tool; drag with a finger to move the page and pinch to zoom. With <b>Select</b>, a finger on what's selected moves, resizes or turns it. PadLink Go uses the same <b>Fingers</b> setting as its Control the PC screen. Phones default to using a finger like the Pencil.</p></div>
+            <div class="hb"><h4>Connect once</h4><p>With Remote mode on, the QR code in PadLink's window (or Boards → <b>Connect PadLink Go</b> here) connects it: in PadLink Go, tap <b>Connect to your PC</b>, scan the code, and click <b>Allow</b> here.</p></div>
+            <div class="hb"><h4>Send</h4><p>In PadLink Go, tap <b>Send to PC</b>. The board appears in Boards here, with a message. Sending again updates it; if you'd changed it here too, it arrives as a copy. Just opening it or turning its pages here isn't a change.</p></div>
+            <div class="hb"><h4>Needs Remote mode</h4><p>PadLink Go reaches this PC through Remote mode, from anywhere. <b>Open on the PC</b> sends a board and opens it here; <b>From the PC</b> keeps a copy of one on the iPad. Forget a device in the same window.</p></div>
+          </section>
+          <section data-topic="students" hidden>
+            <div class="hb"><h4>Students' own boards</h4><p><b>Class</b> (top bar) → <b>Students</b>: open a class, then <b>Show join code</b>. Students scan it on their Chromebooks, pick their name, and you let them in. No app or account.</p></div>
+            <div class="hb"><h4>Follow me, Send my page</h4><p><b>Follow me</b> puts your board on their screens, live. <b>Send my page to everyone</b> adds the page you're on to every student's board.</p></div>
+            <div class="hb"><h4>See their boards</h4><p>Everyone's board at once. Open one to write on it, or <b>Show to class</b> (names hidden unless you choose). The student is paused while it's on show, and their screen looks like everyone else's. <b>✏️ Let them draw</b> lets them keep working on it (and pauses them again).</p></div>
+            <div class="hb"><h4>Teams</h4><p>Fill in the <b>Team</b> and <b>Seat</b> columns of the class list (Class → Name picker → Edit). Class → Students → Teams: home teams, mixed (keep seats), same seats or random. <b>Show teams</b> puts every table here; each Chromebook shows its team, seat and partners.</p></div>
+            <div class="hb"><h4>Team boards</h4><p>Teams → <b>Start team boards</b>: one shared board per team, live on every teammate's Chromebook. Students change only their own marks. See their boards shows the team boards first, to look at, write on or show to the class; there, tap a mark to see who made it (and remove it), or a member's name to make it view only for them. <b>End team boards</b> puts everyone back on their own board.</p></div>
+            <div class="hb"><h4>Raise hand</h4><p>Students tap ✋ on their Chromebook. The corner here shows how many hands are up (or names, or nothing: <b>⚙</b> at the top right). Tap it, or Class → Students, to <b>Lower</b> them. Their notes show only on your iPad or iPhone.</p></div>
+            <div class="hb"><h4>Polls</h4><p><b>Class</b> → <b>Poll</b>: pick A–B up to A–E, True/False or Yes/No, and a time limit, then <b>Start the poll</b>. Put the question on the board or ask it aloud. Students tap an answer, then <b>Lock it in</b>; their screen hides which one, and they can change it until the poll closes. This screen shows only how many answered until you close it; then <b>Show results</b> puts the bars here and on their screens, without names. Tap the <b>Correct answer</b> to mark it in green. <b>PDF report</b> makes a printable summary of every poll of the lesson (what to reteach, each student's score), and <b>Export as CSV</b> a spreadsheet, on this PC, with names or without.</p></div>
+            <div class="hb"><h4>Prepared polls</h4><p>Page number → <b>📊 Poll</b>: a poll for this page, with its question, answers, correct answer and time limit; in the lesson tap <b>Start this page's poll</b>. <b>📋 Paste questions</b> turns a list into pages, each with its poll: the question, then each answer on its own line, <b>*</b> before the correct one, a blank line between questions. <b>Shuffle</b> puts the buttons in a different order on each Chromebook; A is still A. Both are also in Class → Poll. A page with a poll shows 📊 on its page number. While the poll is open, its question and answers show across the top of this screen; tap it to make it small.</p></div>
+            <div class="hb"><h4>Lesson so far</h4><p><b>Class</b> → <b>Poll</b> lists the board's polls (tap one to go to its page) and sums up the lesson's polls as you go: percent correct, what to reteach, each student's score (folded away here). <b>Show the class</b> puts every poll's bars on this screen without names; tick <b>Show correct answers</b> when you're ready.</p></div>
+            <div class="hb"><h4>At the end</h4><p><b>Students can use</b> switches tools off for the lesson. <b>Close the class</b> deletes every student board from the PC.</p></div>
+          </section>
+          <section data-topic="ipad" hidden>
+            <div class="hb"><h4>Same tools on the iPad</h4><p>The iPad or iPhone shows these tools as its own buttons, in step with this board. It shows just the page, filling its screen.</p></div>
+            <div class="hb"><h4>Tools tucked away</h4><p>When a device connects, the tools here slide away. The small tab on the left brings them back.</p></div>
+            <div class="hb"><h4>Gestures</h4><p>On the iPad: two-finger tap is Undo, three-finger tap is Redo.</p></div>
+            <div class="hb"><h4>⚙ Settings</h4><p>PadLink's settings on this PC: how often a paired iPad or iPhone needs Allow, and Raise hand's chime, what the PC screen shows and its times. The same as the PC window's ⚙ Settings.</p></div>
+          </section>
+          <section data-topic="keys" hidden>
+            <dl class="keys">
+              <dt><kbd>P</kbd></dt><dd>Pen</dd><dt><kbd>H</kbd></dt><dd>Highlighter</dd>
+              <dt><kbd>E</kbd></dt><dd>Eraser</dd><dt><kbd>V</kbd></dt><dd>Select</dd>
+              <dt><kbd>T</kbd></dt><dd>Text</dd><dt><kbd>M</kbd></dt><dd>Math</dd>
+              <dt><kbd>N</kbd></dt><dd>Sticky note</dd>
+              <dt><kbd>K</kbd></dt><dd>Laser</dd><dt><kbd>L</kbd> <kbd>A</kbd></dt><dd>Line, arrow</dd>
+              <dt><kbd>R</kbd> <kbd>O</kbd></dt><dd>Rectangle, ellipse</dd><dt><kbd>Ctrl+Z</kbd> <kbd>Ctrl+Y</kbd></dt><dd>Undo, redo</dd>
+              <dt><kbd>Ctrl+A</kbd></dt><dd>Select all</dd><dt><kbd>Ctrl+C</kbd></dt><dd>Copy selection</dd>
+              <dt><kbd>Ctrl+D</kbd></dt><dd>Duplicate</dd><dt><kbd>Tab</kbd> <kbd>Shift+Tab</kbd></dt><dd>Indent text</dd>
+              <dt><kbd>Ctrl+G</kbd></dt><dd>Group (Shift: ungroup)</dd><dt><kbd>Delete</kbd></dt><dd>Delete the selection</dd>
+              <dt><kbd>Ctrl+V</kbd></dt><dd>Paste selection, picture or words</dd><dt><kbd>Esc</kbd></dt><dd>Close, or deselect</dd>
+              <dt><kbd>PgUp</kbd> <kbd>PgDn</kbd></dt><dd>Pages</dd><dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Scroll a tall page</dd>
+              <dt><kbd>Ctrl +</kbd> <kbd>Ctrl −</kbd></dt><dd>Zoom</dd><dt><kbd>Ctrl+0</kbd></dt><dd>Whole page</dd>
+              <dt><kbd>F11</kbd></dt><dd>Full screen</dd>
+            </dl>
+          </section>
+        </div>
+      </div>
+      <footer><a id="helpGuide" class="help-guide" href="https://getpadlink.com/guide/whiteboard.html">Learn more in the PadLink guide →</a><button id="helpClose" class="primary">Got it</button></footer>
+    </div>
+  </div>
+
+  <div id="toast" hidden></div>
+  <input type="file" id="fileFallback" accept="image/*" multiple hidden>
+
+  <script src="/store.js"></script>
+  <script src="/board-host.js"></script>
+  <script src="/update.js"></script>
+  <script src="/rich.js"></script>
+  <script src="/drive.js"></script>
+  <script src="/class.js"></script>
+  <script src="/pcsettings.js"></script>
+  <script src="/engine.js"></script>
+  <script src="/board.js"></script>
+</body>
+</html>
