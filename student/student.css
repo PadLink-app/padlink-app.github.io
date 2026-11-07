@@ -1,0 +1,37 @@
+/* PadLink Student Mode: the join page on a student's Chromebook. */
+:root {
+  --bg: #eef1f7;
+  --card: #ffffff;
+  --line: rgba(29, 36, 51, 0.12);
+  --text: #1d2433;
+  --muted: #5b6478;
+  --accent: #2f6bff;
+  --accent-soft: #eef3ff;
+  --bad: #c42b1c;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--text); font: 17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.join { max-width: 720px; margin: 0 auto; padding: 32px 16px 48px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; margin-bottom: 24px; }
+.brand .sym { width: auto; height: 40px; }
+.brand .word { width: auto; height: 24px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px; box-shadow: 0 1px 3px rgba(29, 36, 51, 0.06), 0 14px 36px rgba(29, 36, 51, 0.08); }
+.card[hidden] { display: none; }
+h1 { margin: 0 0 6px; font-size: 26px; line-height: 1.2; }
+.sub { margin: 0 0 20px; color: var(--muted); }
+form { display: flex; gap: 10px; flex-wrap: wrap; }
+#codeInput { flex: 1 1 220px; min-width: 0; height: 64px; padding: 0 18px; border: 2px solid var(--line); border-radius: 14px; font: 700 32px/1 ui-monospace, Consolas, monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+#codeInput:focus { outline: none; border-color: var(--accent); }
+button { font: inherit; border: 0; border-radius: 14px; cursor: pointer; }
+.primary { height: 64px; padding: 0 28px; background: var(--accent); color: #fff; font-weight: 700; font-size: 19px; }
+.quiet { margin-top: 18px; padding: 10px 14px; background: transparent; color: var(--accent); font-weight: 600; }
+.error { margin: 14px 0 0; color: var(--bad); font-weight: 600; }
+.names { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.names button { min-height: 56px; padding: 10px 12px; background: var(--accent-soft); color: var(--text); font-weight: 600; font-size: 17px; text-align: center; border: 2px solid transparent; }
+.names button:hover { border-color: var(--accent); }
+.names button:disabled { background: #f1f2f5; color: #9aa1af; cursor: default; border-color: transparent; }
+.names button small { display: block; font-weight: 500; font-size: 12px; }
+.spinner { width: 40px; height: 40px; margin-bottom: 16px; border: 4px solid var(--accent-soft); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Only this site's own files. This page sends nothing anywhere. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#2f6bff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PadLink Go">
+<title>PadLink Go</title>
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="go.css">
+</head>
+<body class="pair-page">
+  <header class="bar">
+    <img class="logo" src="brand-symbol.png" alt="">
+    <div class="title">
+      <h1><img class="wordmark" src="brand-go.png" alt="PadLink Go"></h1>
+      <p id="pcName">Connect this iPad to your PC</p>
+    </div>
+  </header>
+  <main class="pair-main">
+    <section id="good" hidden>
+      <p class="pair-lead">PadLink Go controls your classroom PC and prepares boards anywhere, even offline. To connect:</p>
+      <ol class="pair-steps">
+        <li>Tap <b>Share</b> (the square with the arrow), then <b>Add to Home Screen</b>.</li>
+        <li>Open <b>PadLink Go</b> from your Home Screen and tap <b>Connect to your PC</b>.</li>
+        <li>Scan the <b>QR code on the PC screen</b> again, then click <b>Allow</b> on the PC.</li>
+      </ol>
+      <p class="pair-alt">Already have PadLink Go? Just open it and tap <b>Connect to your PC</b>.</p>
+      <details class="pair-other">
+        <summary>Other ways</summary>
+        <p class="pair-alt">Can’t scan in PadLink Go? <button id="copy" class="btn">Copy this link</button> <span id="copied" class="ok" hidden>Copied ✓</span> then in PadLink Go: Connect to your PC → <b>Have a pairing link instead?</b> → Paste.</p>
+        <p class="pair-alt" id="pcPageRow" hidden>Just control the PC, without the app: <a id="pcPage" href="./">Use the PadLink page in Safari</a>.</p>
+      </details>
+    </section>
+    <section id="bad" hidden>
+      <h2>This link isn’t complete</h2>
+      <p>Scan the QR code in PadLink’s window on the PC again (it changes every 10 minutes).</p>
+    </section>
+  </main>
+  <script src="pair.js"></script>
+</body>
+</html>
