@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' wss://*.workers.dev https://padlink-signal.getpadlink.workers.dev; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>PadLink · Join your class</title>
+  <link rel="icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="student.css">
+</head>
+<body>
+  <main class="join">
+    <header class="brand"><img class="sym" src="brand-symbol.png" alt=""><img class="word" src="brand-padlink.png" alt="PadLink"></header>
+
+    <!-- 1. The class code (from the QR code, or typed) -->
+    <section id="stepCode" class="card" hidden>
+      <h1>Join your class</h1>
+      <p class="sub">Type the code your teacher shows on the board.</p>
+      <form id="codeForm" autocomplete="off">
+        <input id="codeInput" maxlength="6" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="ABC123" aria-label="Class code">
+        <button class="primary" type="submit">Join</button>
+      </form>
+      <p id="codeError" class="error" role="alert" hidden></p>
+    </section>
+
+    <!-- 2. Their name, from the teacher's class list -->
+    <section id="stepName" class="card" hidden>
+      <h1>Tap your name</h1>
+      <p class="sub" id="className"></p>
+      <div id="names" class="names"></div>
+      <p id="nameError" class="error" role="alert" hidden></p>
+      <button class="quiet" id="backToCode" type="button">Use a different code</button>
+    </section>
+
+    <!-- 3. Waiting for the teacher to let them in -->
+    <section id="stepWait" class="card" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <h1>Waiting for your teacher</h1>
+      <p class="sub wait-as">You're joining as</p>
+      <p class="wait-name" id="waitName"></p>
+      <p class="sub">Your teacher will let you in soon. Not your name? Choose again now.</p>
+      <button class="secondary" id="notMe" type="button">Not you? Choose again</button>
+    </section>
+
+    <!-- A message: the class is closed, the device wasn't let in, and so on -->
+    <section id="stepMessage" class="card" hidden>
+      <h1 id="messageTitle"></h1>
+      <p class="sub" id="messageText"></p>
+      <button class="primary" id="messageAgain" type="button">Try again</button>
+    </section>
+  </main>
+  <script src="rtc.js"></script>
+  <script src="student-rtc-host.js"></script>
+  <script src="student-ws.js"></script>
+  <script src="student.js"></script>
+</body>
+</html>
