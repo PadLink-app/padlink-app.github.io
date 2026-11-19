@@ -1,0 +1,14 @@
+{
+  "name": "PadLink Go",
+  "short_name": "PadLink Go",
+  "description": "Prepare PadLink whiteboards on your iPad or iPhone, even offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef1f7",
+  "theme_color": "#2f6bff",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
