@@ -1,0 +1,19 @@
+PadLink Tracing (padlink-tracing.woff): the dashed print letters, on writing lines, of the Tracing font in text boxes.
+
+Made for PadLink by laying round dots along the single strokes of Hershey Sans 1-stroke
+(from https://gitlab.com/oskay/svg-fonts, fonts/Hershey/HersheySans1.svg). The tool that builds it is in
+the PadLink repository: tools/make-tracing-font.py.
+
+The Hershey Fonts may be used by anyone for any purpose, commercial or otherwise, provided these
+acknowledgements are distributed with the font data:
+  - The Hershey Fonts were originally created by Dr. A. V. Hershey while working at the
+    U. S. National Bureau of Standards.
+  - The format of the Font data in this distribution was originally created by
+      James Hurt
+      Cognition, Inc.
+      900 Technology Park Drive
+      Billerica, MA 01821
+      (mit-eddie!ci-dandelion!hurt)
+
+SVG conversion: Windell H. Oskay, www.evilmadscientist.com, from emergent.unpythonic.net/software/hershey
+by way of "Hershey Fonts in SVG" by Marty McGuire.
